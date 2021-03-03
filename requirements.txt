@@ -1,0 +1,4 @@
+requests==2.23.0
+bs4==0.0.1
+requests==2.22.0
+url-normalize==1.4.1
