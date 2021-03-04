@@ -1,6 +1,6 @@
-from RankedPages import RankedPages
+from rankedPages import RankedPages
 
 rankedPages = RankedPages('facebook.com')
-l = rankedPages.get_suggested_links()
+rankedPagesLinks = rankedPages.get_suggested_links(limit=10)
 
-print(l)
+print(rankedPagesLinks)
