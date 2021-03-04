@@ -37,6 +37,6 @@ class RankedPages:
         return BeautifulSoup(results_page.content, 'html.parser')
 
     def get_suggested_links(self, limit=LIMIT_LINKS):
-        soup_links = self._google_serach().select('div.yuRUbf > a')
+        soup_links = self._google_serach().select('div.kCrYT > a')
         links = self._normalize_soup_links(soup_links, limit)
         return links
