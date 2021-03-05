@@ -1,3 +1,3 @@
-## Rancked Pages
+## Ranked Pages
 
-Get list of ranked pages's links of a specific website
+🐍 Get list of ranked pages for a specific website
