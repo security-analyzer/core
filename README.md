@@ -1,4 +1,4 @@
-## Web Crawler
+## Security Analyser
 
 🐍 A large scale web crawler to take an overview about security of Moroccan sites
 
