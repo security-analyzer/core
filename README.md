@@ -1,6 +1,6 @@
 ## Web Crawler
 
-🐍 A large scale web crawler for to take an overview about security of Moroccan sites
+🐍 A large scale web crawler to take an overview about security of Moroccan sites
 
 ### Usage
 
