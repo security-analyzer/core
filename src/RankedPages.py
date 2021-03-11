@@ -4,9 +4,10 @@ import requests
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 from url_normalize import url_normalize
+import utils.database as db_utils
 
 
-GOOGLE_SEARCH_ENDPOINT = 'https://www.google.com/search?num=100&lr=lang_en&&ie=utf-8&oe=utf-8&q=site:'
+GOOGLE_SEARCH_ENDPOINT = 'https://www.google.com/search?num=1008&q=site:'
 LIMIT_LINKS = 20
 
 
@@ -28,15 +29,21 @@ class RankedPages:
             if len(links) < limit:
                 href = link.get('href')
                 url = self._normalize_url(href)
-                links.append(url)
+                if(not url.endswith('.pdf') and not url.endswith('.docx') and not url.endswith('.csv') and not url.endswith('.xlsx')):
+                    links.append(url)
         return links
 
     def _google_serach(self):
-        url = GOOGLE_SEARCH_ENDPOINT + self._website
+        url = GOOGLE_SEARCH_ENDPOINT + self._website['url']
         results_page = requests.get(url)
         return BeautifulSoup(results_page.content, 'html.parser')
 
-    def get_suggested_links(self, limit=LIMIT_LINKS):
+    def get_suggested_pages(self, limit=LIMIT_LINKS):
         soup_links = self._google_serach().select('div.kCrYT > a')
-        links = self._normalize_soup_links(soup_links, limit)
-        return links
+        return self._normalize_soup_links(soup_links, limit)
+
+    def save_suggested_pages(self, limit=LIMIT_LINKS):
+        website_links = self.get_suggested_pages(limit)
+        for page_link in website_links:
+            query = "INSERT INTO pages (url, website_id) VALUES ('"+ str(page_link) +"', '"+ str(self._website['id']) +"')"
+            db_utils.commit_query(query)

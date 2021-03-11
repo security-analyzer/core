@@ -1,13 +1,16 @@
 from src import RankedPages
 from src import PageScrapper
-
-rankedPages = RankedPages('jumia.com')
-rankedPagesLinks = rankedPages.get_suggested_links(limit=10)
-
-print(rankedPagesLinks)
+import utils.database as db_utils
 
 
-page_scrapper = PageScrapper(rankedPagesLinks)
-results = page_scrapper.get_results()
+websites = db_utils.fetch_all('SELECT * FROM websites')
 
-print(results[0]['headers'])
+for website in websites:
+    print('Start crawling on: ' + str(website[1]))
+    rankedPages = RankedPages({'id': website[0], 'url': website[1]})
+    rankedPagesLinks = rankedPages.get_suggested_pages(limit=10)
+    rankedPages.save_suggested_pages(limit=10)
+
+    website_pages = db_utils.fetch_all('SELECT * FROM pages WHERE website_id = ' + str(website[0]))
+    page_scrapper = PageScrapper(website_pages)
+    page_scrapper.save_results()
