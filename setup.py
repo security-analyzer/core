@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 setuptools.setup(
-    name='web_crawler',
+    name='security_analyzer',
     version='1.0.0',
     author="mouadziani",
     author_email="mouad.ziani1997@gmail.com",
