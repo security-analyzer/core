@@ -37,3 +37,15 @@ class Headers:
         except:
         	print 'HSTS header not set'
         	return False
+
+
+    def _has_x_content_type_options_defence(self):
+        try:
+        	x_content_type_options = self._get_headers()['X-Content-Type-Options']
+        	if x_content_type_options == 'no-sniff':
+        	    return False
+        	print 'X-Content-Type-Options:', x_content_type_options , 'present'
+        	return True
+        except:
+        	print 'HSTS header not set'
+        	return False
