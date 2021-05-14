@@ -3,7 +3,7 @@ import re
 import requests
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
-import utils.database as db_utils
+from src.models.Page import Page
 
 
 class PageScrapper:
@@ -15,16 +15,13 @@ class PageScrapper:
         return str(page.content).replace("'", "")
 
     def _get_headers(self, page):
-        return str(page.headers).replace("'", "")
+        return page.headers
 
     def get_results(self):
         results = []
         for page_link in self._website_pages:
-            page_infos = requests.get(page_link[1])
-            page = dict()
-            page['id'] = page_link[0]
-            page['headers'] = self._get_headers(page_infos)
-            page['content'] = self._get_content(page_infos)
+            page_infos = requests.get(page_link)
+            page = Page(website=page_link, link=page_link, headers=self._get_headers(page_infos), content=self._get_content(page_infos))
             results.append(page)
         return results
 
