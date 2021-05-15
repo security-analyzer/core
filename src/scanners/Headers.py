@@ -6,7 +6,6 @@ class Headers:
         self._headers = headers
 
     def has_xframe_defence(self):
-        print(self._headers['X-Frame-Options'])
         try:
             xframe = self._headers['X-Frame-Options']
             print('X-FRAME-OPTIONS:', xframe, 'present')

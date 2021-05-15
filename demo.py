@@ -1,3 +1,4 @@
+from prettytable import PrettyTable
 from src import RankedPages
 from src import PageScrapper
 from src import Headers
@@ -6,19 +7,37 @@ from src import Headers
 # rankedPagesLinks = rankedPages.get_suggested_pages(limit=10)
 # print(rankedPagesLinks)
 
-rankedPagesLinks = ['https://www.jumia.ma/', 'https://www.jumia.ma/salvatore/', 'https://www.jumia.ma/diamantine/', 'https://www.jumia.ma/oukitel/', 'https://www.jumia.ma/kyocera/', 'https://www.jumia.ma/monogotas/', 'https://www.jumia.ma/calin/', 'https://www.jumia.ma/logitech/', 'https://www.jumia.ma/lesieur/', 'https://www.jumia.ma/castrol/']
+scan_results_table = PrettyTable()
+scan_results_table.field_names = ["Page link", "X-FRAME-OPTIONS", "X-Content-Type-Options", "Strict-Transport-Security", "Secure cookie (HttpOnly)"]
 
-page_scrapper = PageScrapper(rankedPagesLinks)
-pages = page_scrapper.get_results()[:1]
+ranked_pages_links = [
+    'https://www.jumia.ma/',
+    'https://www.jumia.ma/salvatore/',
+    'https://massarservice.men.gov.ma/waliye/Account',
+    'https://www.cihnet.co.ma/',
+    'https://www.jumia.ma/diamantine/',
+    'https://www.jumia.ma/oukitel/',
+    'https://www.jumia.ma/kyocera/',
+    'https://www.jumia.ma/monogotas/'
+]
+
+page_scrapper = PageScrapper(ranked_pages_links)
+pages = page_scrapper.get_results()
+
+# my_table.add_row([1, "Bob", 6, 11])
+# my_table.add_row([2, "Freddy", 4, 10])
+# my_table.add_row([3, "John", 7, 13])
 
 for page in pages:
     page_headers = page.get_headers()
-    print(page_headers)
     headers_scanner = Headers(page_headers)
-    print(headers_scanner.has_xframe_defence())
-    print(headers_scanner.has_x_content_type_options_defence())
-    print(headers_scanner.has_hsts_defence())
-    print(headers_scanner.has_http_only_defence())
+    has_xframe = headers_scanner.has_xframe_defence()
+    has_x_content_type_options = headers_scanner.has_x_content_type_options_defence()
+    has_hsts = headers_scanner.has_hsts_defence()
+    has_http_only = headers_scanner.has_http_only_defence()
+    scan_results_table.add_row([page.get_link(), has_xframe, has_x_content_type_options, has_hsts, has_http_only])
+
+print(scan_results_table)
 
 # websites = db_utils.fetch_all('SELECT * FROM websites')
 #
