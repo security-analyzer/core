@@ -13,10 +13,12 @@ pages = page_scrapper.get_results()[:1]
 
 for page in pages:
     page_headers = page.get_headers()
+    print(page_headers)
     headers_scanner = Headers(page_headers)
     print(headers_scanner.has_xframe_defence())
     print(headers_scanner.has_x_content_type_options_defence())
     print(headers_scanner.has_hsts_defence())
+    print(headers_scanner.has_http_only_defence())
 
 # websites = db_utils.fetch_all('SELECT * FROM websites')
 #
