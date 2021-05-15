@@ -48,3 +48,16 @@ class Headers:
         except:
             print('The Set-Cookie: HttpOnly is missing')
             return False
+
+    def has_secure_cookie_defence(self):
+        try:
+            set_cookie = self._headers['Set-Cookie']
+            if 'secure' in set_cookie.lower():
+                print('Set-Cookie: Secure is present')
+                return True
+
+            print('The Set-Cookie: Secure is missing')
+            return False
+        except:
+            print('The Set-Cookie: Secure is missing')
+            return False
