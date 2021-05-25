@@ -64,12 +64,12 @@ class Headers:
             print('The Set-Cookie: Secure is missing')
             return False
 
-    def has_content_script_policy_defence(self):
+    def has_content_security_policy_defence(self):
         try:
-            csp = self._headers['Set-Cookie']
-            print('Content-Script-Policy is present')
+            csp = self._headers['Content-Security-Policy']
+            print('Content-Security-Policy is present')
             return True
         except:
-            print('Content-Script-Policy is missing')
+            print('Content-Security-Policy is missing')
             return False
 
