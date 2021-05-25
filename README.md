@@ -8,8 +8,8 @@
 * [x] X-Content-Type-Options
 * [x] Secure cookies
 * [ ] CSRF Tokens
-* [ ] Content security policy
-* [ ] Iframe sandboxing 
+* [x] Content security policy
+* [x] Iframe sandboxing 
 
 ### Usage
 Check the example in the demo.py file

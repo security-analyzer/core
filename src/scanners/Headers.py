@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from bs4 import BeautifulSoup
+
 
 class Headers:
 
@@ -70,3 +72,4 @@ class Headers:
         except:
             print('Content-Script-Policy is missing')
             return False
+
