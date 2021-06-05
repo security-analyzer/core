@@ -37,7 +37,7 @@ from src import Contents
 # print(scan_results_table)
 
 
-page_scrapper = PageScrapper(['http://www.fpbm.ma/new/index.php'])
+page_scrapper = PageScrapper(['https://www.uca.ma/fr/contact'])
 page = page_scrapper.get_results()[0]
 
 # soup = BeautifulSoup(page.get_content(), features="html.parser")
@@ -52,7 +52,13 @@ page = page_scrapper.get_results()[0]
 #     else:
 #         print('not here')
 
+# HSTH
+# HtmlUnit browser
+# burp suite
+# https://gf.dev/xss-protection-test
+# kalilinu
+
 
 contents_scanner = Contents(page.get_content())
-has_iframe_sandboxing = contents_scanner.has_iframe_sandboxing_defence()
+has_iframe_sandboxing = contents_scanner.has_csrf_tokens_defence()
 print(has_iframe_sandboxing)
