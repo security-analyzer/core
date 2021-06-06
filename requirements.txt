@@ -1,5 +1,7 @@
-PrettyTable==2.1.0
-requests==2.23.0
+beautifulsoup4==4.9.3
 bs4==0.0.1
-BeautifulSoup4==4.9.3
+mysql-connector-python-rf==2.2.2
+prettytable==2.1.0
+requests==2.23.0
 url-normalize==1.4.1
+urllib3==1.25.8
