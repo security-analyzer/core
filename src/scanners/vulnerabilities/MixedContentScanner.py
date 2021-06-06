@@ -24,12 +24,15 @@ class MixedContentScanner:
         }
 
 
-    def extract_mixed_content_urls(self):
+    def has_mixed_content_vuls(self):
         soup = BeautifulSoup(self._contents, features="html.parser")
-        mixed_content_urls = []
 
         for tagName, attributes in self._tags().items():
             tags = soup.findAll(tagName)
             for tag in tags:
                 for attribute in attributes:
-                    print()
+                    url = tag.get(attribute)
+                    if (url is not None) and 'http://' in url:
+                        return True
+
+        return False

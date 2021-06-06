@@ -12,8 +12,8 @@
 * [x] Iframe sandboxing 
 
 ### Implemented vulnerabilities checkers:
-* [ ] X-XSS-Protection
-* [ ] Mixed-content inclusions
+* [x] X-XSS-Protection
+* [x] Mixed-content inclusions
 * [ ] Vulnerable remote JavaScript inclusion
 * [ ] Sensitive files
 * [ ] SSL-stripping Vulnerable Form
