@@ -5,6 +5,7 @@ from src import PageScrapper
 from src import Headers
 from src import Contents
 from src import MixedContentScanner
+from src import RemoteJavascriptScanner
 
 # Extract top 10 visited pages
 # websites = [
@@ -85,6 +86,10 @@ page = page_scrapper.get_results()[0]
 # # has_iframe_sandboxing = contents_scanner.has_csrf_tokens_defence()
 # # print(has_iframe_sandboxing)
 #
-mixed_content_scanner = MixedContentScanner(page.get_content())
-has_iframe_sandboxing = mixed_content_scanner.has_mixed_content_vuls()
-print(has_iframe_sandboxing)
+# mixed_content_scanner = MixedContentScanner(page.get_content())
+# has_iframe_sandboxing = mixed_content_scanner.has_mixed_content_vuls()
+# print(has_iframe_sandboxing)
+
+remote_javascript_scanner = RemoteJavascriptScanner(page.get_content(), 'https://spatie.be')
+has_remote_javascript_vuls = remote_javascript_scanner.has_remote_javascript_vuls()
+print(has_remote_javascript_vuls)

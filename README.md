@@ -14,7 +14,7 @@
 ### Implemented vulnerabilities checkers:
 * [x] X-XSS-Protection
 * [x] Mixed-content inclusions
-* [ ] Vulnerable remote JavaScript inclusion
+* [x] Vulnerable remote JavaScript inclusion
 * [ ] Sensitive files
 * [ ] SSL-stripping Vulnerable Form
 * [ ] Outdated CMS
