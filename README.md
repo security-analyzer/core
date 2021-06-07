@@ -2,7 +2,7 @@
 
 🐍 A large scale web crawler (considered also as vulnerability scanner tool) to take an overview about security of Moroccan sites
 
-### Implemented defence mechanisms checkers:
+### Implemented defence mechanisms scanners:
 * [x] X-Frame-Options
 * [x] HTTP Strict-Transport-Security
 * [x] X-Content-Type-Options
@@ -11,15 +11,15 @@
 * [x] Content security policy
 * [x] Iframe sandboxing 
 
-### Implemented vulnerabilities checkers:
+### Implemented vulnerabilities scanners:
 * [x] X-XSS-Protection
 * [x] Mixed-content inclusions
 * [x] Vulnerable remote JavaScript inclusion
-* [ ] Sensitive files
 * [ ] SSL-stripping Vulnerable Form
+* [ ] HTTP Parameter Pollution
+* [ ] Sensitive files
 * [ ] Outdated CMS
 * [ ] Insecure SSL implementation
-* [ ] HTTP Parameter Pollution
 * [ ] Information leakage
 * [ ] Outdated Server Software
 

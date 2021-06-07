@@ -6,6 +6,7 @@ from src import Headers
 from src import Contents
 from src import MixedContentScanner
 from src import RemoteJavascriptScanner
+from src import XSSProtectionScanner
 
 # Extract top 10 visited pages
 # websites = [
@@ -90,6 +91,10 @@ page = page_scrapper.get_results()[0]
 # has_iframe_sandboxing = mixed_content_scanner.has_mixed_content_vuls()
 # print(has_iframe_sandboxing)
 
-remote_javascript_scanner = RemoteJavascriptScanner(page.get_content(), 'https://spatie.be')
-has_remote_javascript_vuls = remote_javascript_scanner.has_remote_javascript_vuls()
-print(has_remote_javascript_vuls)
+# remote_javascript_scanner = RemoteJavascriptScanner(page.get_content(), 'https://spatie.be')
+# has_remote_javascript_vuls = remote_javascript_scanner.has_remote_javascript_vuls()
+# print(has_remote_javascript_vuls)
+# print(page.get_headers())
+xxs_protection_scanner = XSSProtectionScanner(page.get_headers())
+has_xxs_protection_vuls = xxs_protection_scanner.has_xxs_protection_vuls()
+print(has_xxs_protection_vuls)
