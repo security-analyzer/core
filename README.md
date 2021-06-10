@@ -7,6 +7,7 @@
 * [x] HTTP Strict-Transport-Security
 * [x] X-Content-Type-Options
 * [x] Secure cookies
+* [x] HttpOnly cookies
 * [x] CSRF Tokens
 * [x] Content security policy
 * [x] Iframe sandboxing 
@@ -15,13 +16,13 @@
 * [x] X-XSS-Protection
 * [x] Mixed-content inclusions
 * [x] Vulnerable remote JavaScript inclusion
-* [ ] SSL-stripping Vulnerable Form
+* [x] SSL-stripping Vulnerable Form
 * [ ] HTTP Parameter Pollution
 * [ ] Sensitive files
+* [ ] Information leakage
+* [ ] Outdated Server Software -
 * [ ] Outdated CMS
 * [ ] Insecure SSL implementation
-* [ ] Information leakage
-* [ ] Outdated Server Software
 
 ### Usage
 Check the example in the demo.py file

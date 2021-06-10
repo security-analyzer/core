@@ -7,6 +7,7 @@ from src import Contents
 from src import MixedContentScanner
 from src import RemoteJavascriptScanner
 from src import XSSProtectionScanner
+from src import SSLStrippingFormScanner
 
 # Extract top 10 visited pages
 # websites = [
@@ -95,6 +96,11 @@ page = page_scrapper.get_results()[0]
 # has_remote_javascript_vuls = remote_javascript_scanner.has_remote_javascript_vuls()
 # print(has_remote_javascript_vuls)
 # print(page.get_headers())
-xxs_protection_scanner = XSSProtectionScanner(page.get_headers())
-has_xxs_protection_vuls = xxs_protection_scanner.has_xxs_protection_vuls()
-print(has_xxs_protection_vuls)
+# xxs_protection_scanner = XSSProtectionScanner(page.get_headers())
+# has_xxs_protection_vuls = xxs_protection_scanner.has_xxs_protection_vuls()
+# print(has_xxs_protection_vuls)
+
+
+ssl_striping_form_scanner = SSLStrippingFormScanner(page.get_content())
+has_ssl_striping_form_vuls = ssl_striping_form_scanner.has_ssl_tripping_form_vuls()
+print(has_ssl_striping_form_vuls)
