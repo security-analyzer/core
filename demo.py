@@ -101,6 +101,14 @@ page = page_scrapper.get_results()[0]
 # print(has_xxs_protection_vuls)
 
 
-ssl_striping_form_scanner = SSLStrippingFormScanner(page.get_content())
-has_ssl_striping_form_vuls = ssl_striping_form_scanner.has_ssl_tripping_form_vuls()
-print(has_ssl_striping_form_vuls)
+# ssl_striping_form_scanner = SSLStrippingFormScanner(page.get_content())
+# has_ssl_striping_form_vuls = ssl_striping_form_scanner.has_ssl_tripping_form_vuls()
+# print(has_ssl_striping_form_vuls)
+
+
+from Wappalyzer import Wappalyzer, WebPage
+
+webpage = WebPage.new_from_url('https://www.uca.ma/')
+wappalyzer = Wappalyzer.latest()
+
+print(wappalyzer.analyze_with_versions_and_categories(webpage))

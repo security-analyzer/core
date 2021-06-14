@@ -2,11 +2,7 @@
 from bs4 import BeautifulSoup
 
 
-class RemoteJavascriptScanner:
-
-    def __init__(self, contents, domain):
-        self._contents = contents
-        self._domain = domain
+class RemoteJavascriptScanner(Scanner):
 
 
     def _trusted_domains(self):
