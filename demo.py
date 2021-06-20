@@ -106,9 +106,9 @@ page = page_scrapper.get_results()[0]
 # print(has_ssl_striping_form_vuls)
 
 
-from Wappalyzer import Wappalyzer, WebPage
+# from Wappalyzer import Wappalyzer, WebPage
 
-webpage = WebPage.new_from_url('https://www.uca.ma/')
-wappalyzer = Wappalyzer.latest()
+# webpage = WebPage.new_from_url('https://www.uca.ma/')
+# wappalyzer = Wappalyzer.latest()
 
-print(wappalyzer.analyze_with_versions_and_categories(webpage))
+# print(wappalyzer.analyze_with_versions_and_categories(webpage))
