@@ -112,11 +112,15 @@
 # print(_utils.extract_cms('https://www.drupal.org/'))
 # print(_utils.extract_server('https://www.drupal.org/'))
 
-import scanners.vulnerabilities.OutdatedServerSoftwareScanner as _outdatedServerSoftwareScanner
-import scanners.vulnerabilities.OutdatedCMSScanner as _outdatedCMSScanner
+# import scanners.vulnerabilities.OutdatedServerSoftwareScanner as _outdatedServerSoftwareScanner
+# import scanners.vulnerabilities.OutdatedCMSScanner as _outdatedCMSScanner
+import scanners.vulnerabilities.SensitiveFilesScanner as _sensitiveFilesScanner
 
 # _outdatedServerScanner = _outdatedServerSoftwareScanner.OutdatedServerSoftwareScanner('https://www.drupal.org/')
 # print(_outdatedServerScanner.has_outdated_server_software_vuls())
 
-_CMSScanner = _outdatedCMSScanner.OutdatedServerSoftwareScanner('https://www.drupal.org/')
-print(_CMSScanner.has_outdated_cms_vuls())
+# _CMSScanner = _outdatedCMSScanner.OutdatedServerSoftwareScanner('https://www.drupal.org/')
+# print(_CMSScanner.has_outdated_cms_vuls())
+
+_filesScanner = _sensitiveFilesScanner.SensitiveFilesScanner('https://www.drupal.org/')
+print(_filesScanner.has_sensitive_files_vuls())

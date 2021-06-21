@@ -4,8 +4,8 @@ from bs4 import BeautifulSoup
 
 class MixedContentScanner:
 
-    def __init__(self, contents):
-        self._contents = contents
+    def __init__(self, body):
+        self._body = body
 
 
     def _tags(self):
@@ -25,7 +25,7 @@ class MixedContentScanner:
 
 
     def has_mixed_content_vuls(self):
-        soup = BeautifulSoup(self._contents, features="html.parser")
+        soup = BeautifulSoup(self._body, features="html.parser")
 
         for tagName, attributes in self._tags().items():
             tags = soup.findAll(tagName)

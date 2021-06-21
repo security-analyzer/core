@@ -7,6 +7,7 @@ class Contents:
     def __init__(self, contents):
         self._contents = contents
 
+
     def has_iframe_sandboxing_defence(self):
         try:
             soup = BeautifulSoup(self._contents, features="html.parser")
