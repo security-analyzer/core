@@ -22,10 +22,10 @@ class SensitiveFilesScanner:
     def has_sensitive_files_vuls(self):
         sensitive_files = self._sensitive_files()
         for file in sensitive_files:
-            response = requests.get(self._website + '/' + file)
+            url = self._website + file if self._website.endswith('/') else self._website + '/' + file
+            response = requests.get(url)
 
             if response and response.status_code != 400:
-                print(file)
                 return True
             
         return False
