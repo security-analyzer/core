@@ -17,11 +17,11 @@
 * [x] Mixed-content inclusions
 * [x] Vulnerable remote JavaScript inclusion
 * [x] SSL-stripping Vulnerable Form
+* [x] Outdated Server Software -
+* [x] Outdated CMS
 * [ ] HTTP Parameter Pollution
 * [ ] Sensitive files
 * [ ] Information leakage
-* [ ] Outdated Server Software -
-* [ ] Outdated CMS
 * [ ] Insecure SSL implementation
 
 ### Usage
