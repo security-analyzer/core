@@ -19,8 +19,8 @@
 * [x] SSL-stripping Vulnerable Form
 * [x] Outdated Server Software -
 * [x] Outdated CMS
+* [x] Sensitive files
 * [ ] HTTP Parameter Pollution
-* [ ] Sensitive files
 * [ ] Information leakage
 * [ ] Insecure SSL implementation
 
