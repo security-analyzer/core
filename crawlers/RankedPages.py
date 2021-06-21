@@ -2,6 +2,7 @@
 import re
 import ssl
 import requests
+import urllib.parse
 from bs4 import BeautifulSoup
 from url_normalize import url_normalize
 from url_normalize.tools import unquote
@@ -46,6 +47,8 @@ class RankedPages:
                 print("\nError Timeout", target)
                 return url_google
 
+            print(response.text)
+
             # Parser HTML of BeautifulSoup
             soup = BeautifulSoup(response.text, "html.parser")
             if response.text.find("Our systems have detected unusual traffic") != -1:
@@ -72,8 +75,62 @@ class RankedPages:
                 # Verify if Google's Captcha has caught us!
                 print("No more results...")
                 return url_google
+            
+            print(len(url_google))
 
         return url_google[:limit]
+
+
+    def _bing_search(self, limit):
+        dork=["site:","-site:","filetype:","intitle:","intext:"]
+        iteration=0
+        target = self._website
+        urls_final = []
+        try:
+            serach_url = "https://www.bing.com/search?q=test"#+dork[0]+target+"&count=100&go=Buscar"
+            # print(serach_url)
+            response = requests.get(serach_url)
+            print(response.text)
+            # print('========================')
+            # soup = BeautifulSoup(response.text, "html.parser")
+            # links = soup.find_all('href')
+            # for link in links:
+            #     print(link.get('text'))
+            # while (len(urls_final) < limit):
+                # urls_final = self.parser_html(response.text)
+        except Exception as e:
+            pass
+        
+        return urls_final
+
+    
+    def parser_html(content):
+        urls = []
+        urls_clean = []
+        urls_final =[]
+        delete_bing=["microsoft", "msn", "bing"]
+        soup = BeautifulSoup(content, 'html.parser')
+        
+        try:
+            for link in soup.find_all('a'):
+                print(link.get('href'))
+                if (urllib.parse(link.get('href')) != '' and urllib.parse(link.get('href'))[1].strip() != ''):	
+                    print(urllib.parse(link.get('href')))
+                    urls.append(urllib.parse(link.get('href'))[1])
+                
+                # Delete duplicates
+                [urls_clean.append(i) for i in urls if not i in urls_clean] 
+                
+                # Delete not domains belongs to target
+                for value in urls_clean:
+                    if (value.find(delete_bing[0])  == -1):
+                        if (value.find(delete_bing[1])  == -1):
+                            if (value.find(delete_bing[2])  == -1):
+                                urls_final.append(value)
+        except Exception as e:
+            pass
+
+        return urls_final
 
 
     def get_suggested_pages(self, limit=LIMIT_LINKS):

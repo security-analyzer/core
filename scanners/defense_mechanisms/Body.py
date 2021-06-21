@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
-
-
-def contains_one_of(word, terms):
-    for term in terms:
-        if term in word:
-            return True
-    return False
+import utils.Utils as _utils
 
 class Contents:
 
@@ -40,7 +34,7 @@ class Contents:
             for form in forms:
                 hidden_inputs = form.find_all("input", type="hidden")
                 for hidden_input in hidden_inputs:
-                    if contains_one_of(hidden_input.get('name'), tokens) and hidden_input.get('value').isalnum():
+                    if _utils.contains_one_of(hidden_input.get('name'), tokens) and hidden_input.get('value').isalnum():
                         return True
 
             return False

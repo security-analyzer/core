@@ -1,13 +1,13 @@
-from bs4 import BeautifulSoup
-from prettytable import PrettyTable
-from src import RankedPages
-from src import PageScrapper
-from src import Headers
-from src import Contents
-from src import MixedContentScanner
-from src import RemoteJavascriptScanner
-from src import XSSProtectionScanner
-from src import SSLStrippingFormScanner
+# from bs4 import BeautifulSoup
+# from prettytable import PrettyTable
+# from src import RankedPages
+# from src import PageScrapper
+# from src import Headers
+# from src import Contents
+# from src import MixedContentScanner
+# from src import RemoteJavascriptScanner
+# from src import XSSProtectionScanner
+# from src import SSLStrippingFormScanner
 
 # Extract top 10 visited pages
 # websites = [
@@ -62,8 +62,8 @@ from src import SSLStrippingFormScanner
 # print(scan_results_table)
 
 
-page_scrapper = PageScrapper(['https://spatie.be'])
-page = page_scrapper.get_results()[0]
+# page_scrapper = PageScrapper(['https://spatie.be'])
+# page = page_scrapper.get_results()[0]
 #
 # # soup = BeautifulSoup(page.get_content(), features="html.parser")
 # # iframes = soup.select('iframe')
@@ -106,9 +106,17 @@ page = page_scrapper.get_results()[0]
 # print(has_ssl_striping_form_vuls)
 
 
-# from Wappalyzer import Wappalyzer, WebPage
+# import utils.Utils as _utils 
 
-# webpage = WebPage.new_from_url('https://www.uca.ma/')
-# wappalyzer = Wappalyzer.latest()
 
-# print(wappalyzer.analyze_with_versions_and_categories(webpage))
+# print(_utils.extract_cms('https://www.drupal.org/'))
+# print(_utils.extract_server('https://www.drupal.org/'))
+
+import scanners.vulnerabilities.OutdatedServerSoftwareScanner as _outdatedServerSoftwareScanner
+import scanners.vulnerabilities.OutdatedCMSScanner as _outdatedCMSScanner
+
+# _outdatedServerScanner = _outdatedServerSoftwareScanner.OutdatedServerSoftwareScanner('https://www.drupal.org/')
+# print(_outdatedServerScanner.has_outdated_server_software_vuls())
+
+_CMSScanner = _outdatedCMSScanner.OutdatedServerSoftwareScanner('https://www.drupal.org/')
+print(_CMSScanner.has_outdated_cms_vuls())
