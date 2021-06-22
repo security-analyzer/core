@@ -3,7 +3,7 @@ from models.Page import Page
 from crawlers.RankedPages import RankedPages
 from crawlers.PageScrapper import PageScrapper
 
-rankedPages = RankedPages('http://www.fpbm.ma/new/')
+rankedPages = RankedPages('http://www.parlement.ma')
 # # pageScrapper = PageScrapper('http://www.fpbm.ma/new/', [
 # #     'http://www.fpbm.ma/new/concours/',
 # #     'http://www.fpbm.ma/new/exam/liste.php',
@@ -17,8 +17,25 @@ rankedPages = RankedPages('http://www.fpbm.ma/new/')
 # #     'http://www.fpbm.ma/new/formations.php',
 # # ])
 
+# http://www.parlement.ma
+# http://www.conseil-constitutionnel.ma
+# http://www.diplomatie.ma
+# http://www.justice.gov.ma
+# www.habous.gov.ma
+# http://www.minculture.gov.ma
+# http://www.tourisme.gov.ma
+# http://www.sante.gov.ma
+# http://www.mcrp.gov.ma
+# http://www.mem.gov.ma
+# http://www.water.gov.ma
+# http://www.mincom.gov.ma
+# http://www.mcinet.gov.ma
+# http://www.mmsp.gov.ma
+# http://www.marocainsdumonde.gov.ma
+
+
 # print(pageScrapper.get_results())
-ranked_pages_links = rankedPages.get_suggested_pages(limit=200)
+ranked_pages_links = rankedPages.get_suggested_pages(limit=100)
 print('====================' + 'http://www.fpbm.ma/new/' + '==========================')
 print(len(ranked_pages_links))
 for link in ranked_pages_links:

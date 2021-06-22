@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 import re
 import ssl
 import requests
@@ -7,6 +8,8 @@ from bs4 import BeautifulSoup
 from url_normalize import url_normalize
 from url_normalize.tools import unquote
 ssl._create_default_https_context = ssl._create_unverified_context
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 
 LIMIT_LINKS = 20
 
@@ -31,7 +34,8 @@ class RankedPages:
         user_agent = {'User-agent': 'Mozilla5.0'}
         contador = 100
         target = self._website
-        
+        target_domain = target.replace('http://').replace('https://')
+
         while len(url_google) < limit:
             search_google = "https://www.google.com/search?q=+site:" + target + " -filetype:pdf&filter=0&start=" + str(
                 start_page) + "&num=" + str(contador)
@@ -47,11 +51,10 @@ class RankedPages:
                 print("\nError Timeout", target)
                 return url_google
 
-            print(response.text)
-
             # Parser HTML of BeautifulSoup
             soup = BeautifulSoup(response.text, "html.parser")
             if response.text.find("Our systems have detected unusual traffic") != -1:
+                print("Our systems have detected unusual traffic")
                 return url_google
             
             # Parser url's throught regular expression
@@ -68,7 +71,8 @@ class RankedPages:
                 nlink = unquote(nlink).decode('utf8')
 
                 if (not nlink.endswith('.pdf') and not nlink.endswith('.docx') and not nlink.endswith(
-                        '.csv') and not nlink.endswith('.xlsx') and (target in nlink) and ('accounts.google.com') not in nlink):
+                        '.csv') and not nlink.endswith('.xlsx') and (target_domain in nlink) and ('accounts.google.com') not in nlink):
+                    print(nlink)
                     url_google.append(nlink)
             
             if len(raw_links) < 2:
@@ -78,26 +82,32 @@ class RankedPages:
             
             print(len(url_google))
 
+            time.sleep(10)
+
         return url_google[:limit]
 
 
     def _bing_search(self, limit):
+        browser_options = Options()
+        browser_options.headless = False  # You can set 'False' if you need disable background mode
+        browser = webdriver.Firefox(options=browser_options)
         dork=["site:","-site:","filetype:","intitle:","intext:"]
-        iteration=0
         target = self._website
         urls_final = []
         try:
-            serach_url = "https://www.bing.com/search?q=test"#+dork[0]+target+"&count=100&go=Buscar"
-            # print(serach_url)
-            response = requests.get(serach_url)
-            print(response.text)
-            # print('========================')
-            # soup = BeautifulSoup(response.text, "html.parser")
-            # links = soup.find_all('href')
-            # for link in links:
-            #     print(link.get('text'))
+            serach_url = "https://www.bing.com/search?q=site:" + target + "&count=100"#+dork[0]+target+"&count=100&go=Buscar"
+            browser.get(serach_url)
+            page_html = browser.page_source
+            soup = BeautifulSoup(page_html, "html.parser")
+            links = soup.find_all("a")
+            for link in links:
+                nlink = link.get('href')
+                nlink = unquote(nlink).decode('utf8')
+                if (not nlink.endswith('.pdf') and not nlink.endswith('.docx') and not nlink.endswith(
+                        '.csv') and not nlink.endswith('.xlsx') and ('accounts.google.com') not in nlink):
+                    print(nlink)
             # while (len(urls_final) < limit):
-                # urls_final = self.parser_html(response.text)
+            #     urls_final = self.parser_html(page_html)
         except Exception as e:
             pass
         

@@ -19,14 +19,16 @@ def contains_one_of(word, terms):
         if term in word:
             return True
     return False
-    
+
 
 def extract_server(url):
     webpage = WebPage.new_from_url(url)
     wappalyzer = Wappalyzer.latest()
     techs = wappalyzer.analyze_with_versions_and_categories(webpage)
+    # print(techs)
     for key in techs:
         if 'Web servers' in techs[key]['categories']:
+            version = False
             try:
                 version = techs[key]['versions'][techs[key]['categories'].index('Web servers')]
             except:
@@ -42,6 +44,7 @@ def extract_cms(url):
     techs = wappalyzer.analyze_with_versions_and_categories(webpage)
     for key in techs:
         if 'CMS' in techs[key]['categories']:
+            version = False
             try:
                 version = techs[key]['versions'][techs[key]['categories'].index('CMS')]
             except:

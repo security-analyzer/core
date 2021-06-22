@@ -26,6 +26,7 @@ class SensitiveFilesScanner:
             response = requests.get(url)
 
             if response and response.status_code != 400:
+                print(file)
                 return True
             
         return False
