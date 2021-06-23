@@ -9,4 +9,6 @@ import utils.Utils as _utils
 _utils.insert_website_with_pages('Secteur public', 'http://www.parlement.ma', pages = [])
 websites = _utils.find_websites()
 
-print(websites)
+pages = _utils.read_file_items('datasets/ecommerce.txt')
+
+print(pages)

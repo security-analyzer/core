@@ -72,6 +72,10 @@ def accepted_url(target, nlink):
     return False
 
 
+def read_file_items(file_path):
+    file = open(file_path, "r")
+    return file.readlines()
+
 
 def fetch_all(query):
     query_cursor = database.cursor()
