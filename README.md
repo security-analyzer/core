@@ -2,6 +2,10 @@
 
 🐍 A large scale web crawler (considered also as vulnerability scanner tool) to take an overview about security of Moroccan sites
 
+## Current architecture / Workflow:
+
+<p align="center"><img src="https://github.com/security-analyzer/security-analyzer/blob/master/diagrames/architecture.png" width="600px" height="auto"></p>
+
 ### Implemented defence mechanisms scanners:
 * [x] X-Frame-Options
 * [x] HTTP Strict-Transport-Security
