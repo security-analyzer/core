@@ -2,15 +2,15 @@
 from bs4 import BeautifulSoup
 import utils.Utils as _utils
 
-class Contents:
+class Body:
 
-    def __init__(self, contents):
-        self._contents = contents
+    def __init__(self, body):
+        self._body = body
 
 
     def has_iframe_sandboxing_defence(self):
         try:
-            soup = BeautifulSoup(self._contents, features="html.parser")
+            soup = BeautifulSoup(self._body, features="html.parser")
             iframes = soup.findAll('iframe')
             if len(iframes) == 0:
                 return True
@@ -27,7 +27,7 @@ class Contents:
     def has_csrf_tokens_defence(self):
         try:
             tokens = ['csrf', 'token', 'nonce']
-            soup = BeautifulSoup(self._contents, features="html.parser")
+            soup = BeautifulSoup(self._body, features="html.parser")
             forms = soup.findAll('form')
             if len(forms) == 0:
                 return True
