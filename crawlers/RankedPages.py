@@ -80,10 +80,6 @@ class RankedPages:
                 print("No more results...")
                 return url_google
             
-            print(len(url_google))
-
-            time.sleep(10)
-
         return url_google[:limit]
 
 
@@ -105,9 +101,9 @@ class RankedPages:
                 nlink = unquote(nlink).decode('utf8')
                 if (not nlink.endswith('.pdf') and not nlink.endswith('.docx') and not nlink.endswith(
                         '.csv') and not nlink.endswith('.xlsx') and ('accounts.google.com') not in nlink):
-                    print(nlink)
-            # while (len(urls_final) < limit):
-            #     urls_final = self.parser_html(page_html)
+                    urls_final.append(nlink)
+            while (len(urls_final) < limit):
+                urls_final = self.parser_html(page_html)
         except Exception as e:
             pass
         
