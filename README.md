@@ -6,7 +6,8 @@
 
 <p align="center"><img src="https://github.com/security-analyzer/security-analyzer/blob/master/diagrames/architecture.png" width="600px" height="auto"></p>
 
-### Implemented defence mechanisms scanners:
+## Implemented defence mechanisms scanners:
+
 * [x] X-Frame-Options
 * [x] HTTP Strict-Transport-Security
 * [x] X-Content-Type-Options
@@ -16,7 +17,8 @@
 * [x] Content security policy
 * [x] Iframe sandboxing 
 
-### Implemented vulnerabilities scanners:
+## Implemented vulnerabilities scanners:
+
 * [x] X-XSS-Protection
 * [x] Mixed-content inclusions
 * [x] Vulnerable remote JavaScript inclusion
@@ -29,7 +31,7 @@
 * [ ] Insecure SSL implementation
 
 ### Usage
-Check the example in the demo.py file
+Check the examples in the demos folder
 
 
-feautred_repository
+featured_repository
