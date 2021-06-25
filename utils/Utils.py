@@ -1,6 +1,8 @@
 import json
+from urllib.parse import quote
 from Wappalyzer import Wappalyzer, WebPage
 import mysql.connector
+from requests.packages import urllib3
 
 
 # Database config
@@ -78,14 +80,14 @@ def read_file_items(file_path):
 
 
 def fetch_all(query):
-    query_cursor = database.cursor()
+    query_cursor = database.cursor(buffered=True)
     query_cursor.execute(query)
     items = query_cursor.fetchall()
     return items
 
 
 def fetch_one(query):
-    query_cursor = database.cursor()
+    query_cursor = database.cursor(buffered=True)
     query_cursor.execute(query)
     item = query_cursor.fetchone()
     return item
@@ -107,6 +109,34 @@ def find_website_by_url(url):
     return fetch_one(query)
 
 
+def find_website_by_category_name(category_name):
+    query = "SELECT websites.* FROM websites WHERE websites.category_id IN (SELECT categories.id FROM categories WHERE categories.name = '" + str(category_name) + "')"
+    return fetch_one(query)
+
+
+def find_websites_by_category_name(category_name):
+    query = "SELECT websites.id, websites.url FROM websites WHERE websites.category_id IN (SELECT categories.id FROM categories WHERE categories.name = '" + str(category_name) + "')"
+    websites = fetch_all(query)
+    website_with_pages = []
+    for website in websites:
+        query = "SELECT url FROM pages WHERE website_id = '" + str(website[0]) + "'"
+        website_pages = fetch_all(query)
+        pages = []
+        for page in website_pages:
+            pages.append(page[0])
+        website_with_pages.append({'website': website[1], 'pages': pages})
+    return website_with_pages
+
+
+def find_web_pages_by_category_name(category_name):
+    website = find_website_by_category_name(category_name)
+    if website:
+        query = "SELECT * FROM pages WHERE website_id = '" + str(website[0]) + "'"
+        return fetch_all(query)
+
+    return []
+
+
 def insert_website_with_pages(category_name, website_url = '', pages = []):
     category = find_category_by_name(category_name)
     if not category:
@@ -121,6 +151,8 @@ def insert_website_with_pages(category_name, website_url = '', pages = []):
         website = find_website_by_url(website_url)
     
     for page in pages:
+        page = page.replace("'", "\\'")
+        print(page)
         query = "INSERT INTO pages (url, website_id) VALUES ('" + str(page) + "', '" + str(website[0]) + "')"
         commit_query(query)
 

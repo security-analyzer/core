@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import requests
 from models.Page import Page
+import urllib3
 
+
+urllib3.disable_warnings()
 
 class PageScrapper:
 
@@ -22,7 +25,7 @@ class PageScrapper:
         results = []
         for url in self._pages:
             url = url.replace('\n','')
-            page_infos = requests.get(url)
+            page_infos = requests.get(url, verify=False)
             page = Page(website=self._website, link=url, headers=self._get_headers(page_infos), content=self._get_content(page_infos))
             results.append(page)
         return results
