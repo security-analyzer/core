@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
 
-class RemoteJavascriptScanner(Scanner):
+class RemoteJavascriptScanner:
 
+    def __init__(self, website, body):
+        self._body = body
+        self._domain = urlparse(website).netloc
 
     def _trusted_domains(self):
         return [
@@ -14,7 +18,7 @@ class RemoteJavascriptScanner(Scanner):
 
 
     def has_remote_javascript_vuls(self):
-        soup = BeautifulSoup(self._contents, features="html.parser")
+        soup = BeautifulSoup(self._body, features="html.parser")
 
         scriptTags = soup.findAll('script')
         for tag in scriptTags:

@@ -1,19 +1,11 @@
+from datetime import datetime
 import scanners.DefenseMechanismsScanner as _defense_mechanisms_scanner
+import scanners.VulneravilitiesScanner as _vulneravilities_scanner
 import utils.Utils as _utils
+from multiprocessing import Process, Queue
 import time
-
-# website = 'https://www.jumia.ma'
-# # pages = [
-# #     # 'https://www.um6p.ma',
-# #     'https://www.jumia.ma',
-# #     'https://www.decathlon.ma'
-# # ]
-# start_time = time.time()
-# pages = _utils.read_file_items('datasets/ecommerce.txt')
-# defense_mechanisms_scanner = _defense_mechanisms_scanner.DefenseMechanismsScanner(website, pages)
-# defense_mechanisms_scanner.handle_scan_process()
-# print(defense_mechanisms_scanner.get_scan_results())
-# print("--- %s seconds ---" % (time.time() - start_time))
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 # Insert websites and their pages
 categories_with_websites = [
@@ -124,27 +116,75 @@ categories_with_websites = [
     }
 ]
 
-# for website_category in categories_with_websites:
-#     for website in website_category['websites']:
-#         pages = [] 
-#         for page in website_category['pages']:
-#             website_domain = website.replace('http://', '').replace('https://', '')
-#             if website_domain in page:
-#                 pages.append(page)
-#         _utils.insert_website_with_pages(website_category['category'], website, pages)
+for website_category in categories_with_websites:
+    for website in website_category['websites']:
+        pages = [] 
+        for page in website_category['pages']:
+            website_domain = website.replace('http://', '').replace('https://', '')
+            if website_domain in page:
+                pages.append(page)
+        _utils.insert_website_with_pages(website_category['category'], website, pages)
 
 
-# # Run defense mechanisms scanner
+def hand_scan_for_category(category_id, scan_id):
+    print('============ category ' + str(category_id) + ' =========================')
+    websites = _utils.find_websites_by_category_name(category_id)
+    for website in websites:
+        defense_mechanisms_scanner = _defense_mechanisms_scanner.DefenseMechanismsScanner(website['website'], website['pages'])
+        defense_mechanisms_scanner.handle_scan_process()
+        scan_results = defense_mechanisms_scanner.get_scan_results()
+        _utils.save_scan_results_by_scan_id(scan_id)
+        print(scan_results)
 
-# # secteur publique 
-start_time = time.time()
-secteur_publique_pages = []
-secteur_publique_websites = _utils.find_websites_by_category_name('Secteur public')
-for website in secteur_publique_websites:
-    defense_mechanisms_scanner = _defense_mechanisms_scanner.DefenseMechanismsScanner(website['website'], website['pages'])
-    defense_mechanisms_scanner.handle_scan_process()
-    print(defense_mechanisms_scanner.get_scan_results())
-print("--- %s seconds ---" % (time.time() - start_time))
+        vulneravilities_scanner_scanner = _vulneravilities_scanner.VulneravilitiesScanner(website['website'], website['pages'])
+        vulneravilities_scanner_scanner.handle_scan_process()
+        scan_results = defense_mechanisms_scanner.get_scan_results()
+        _utils.save_scan_results_by_scan_id(scan_id)
+        print(scan_results)
 
 
+# # Run vuls and defense mechanisms scanners
+if __name__ == "__main__":
+    
+    new_scan = _utils.create_new_scan('Scan 1')
+    print(new_scan)
+    # queue = Queue()
 
+    # start_time = time.time()
+    # categories = _utils.find_categories()
+    # processes = [Process(target=hand_scan_for_category, args=(category[1], )) for category in categories[2:3]]
+
+    # for p in processes:
+    #     p.start()
+
+    # for p in processes:
+    #     p.join()
+
+# vuls = [
+#     'has_mixed_content_vuls',
+#     'has_mixed_content_vuls',
+#     'has_remote_javascript_vuls',
+#     'has_ssl_tripping_form_vuls',
+#     'has_xxs_protection_vuls',
+#     'has_outdated_cms_vuls',
+#     'has_outdated_server_software_vuls',
+#     'has_sensitive_files_vuls',
+# ]
+
+# defences = [
+#     'has_xframe',
+#     'has_x_content_type_options',
+#     'has_hsts',
+#     'has_secure_cookie',
+#     'has_http_only',
+#     'has_iframe_sandboxing',
+#     'has_csrf_tokens',
+# ]
+
+# for vul in vuls:
+#     query = "INSERT INTO `rules`(`name`, `type`) VALUES ('" + vul + "','vulneravility')"
+#     _utils.commit_query(query)
+
+# for defense in defences:
+#     query = "INSERT INTO `rules`(`name`, `type`) VALUES ('" + defense + "','defense_mechanism')"
+#     _utils.commit_query(query)

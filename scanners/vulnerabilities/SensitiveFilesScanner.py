@@ -23,7 +23,7 @@ class SensitiveFilesScanner:
         sensitive_files = self._sensitive_files()
         for file in sensitive_files:
             url = self._website + file if self._website.endswith('/') else self._website + '/' + file
-            response = requests.get(url)
+            response = requests.get(url, verify=False)
 
             if response and response.status_code != 400:
                 print(file)

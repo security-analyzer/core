@@ -1,17 +1,19 @@
+# -*- coding: utf-8 -*-
 import json
+import ssl
 from urllib.parse import quote
 from Wappalyzer import Wappalyzer, WebPage
 import mysql.connector
-from requests.packages import urllib3
+import urllib.request
 
 
 # Database config
-database = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="root",
-    database="web_crawler"
-)
+# database = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     passwd="root",
+#     database="web_crawler"
+# )
 
 # Shared utils
 def dict_to_json(dictionary):
@@ -33,11 +35,30 @@ def contains_one_of(word, terms):
     return False
 
 
-def extract_server(url):
-    webpage = WebPage.new_from_url(url)
+def urlopen(url, timeout=60):
+    headers = {'User-Agent': 'Mozilla/5.0 Firefox/33.0'}
+    req = urllib.request.Request(url, None, headers)
+    return urllib.request.urlopen(req, timeout=timeout, context=ssl._create_unverified_context())
+
+
+def tupes_to_dict(tup, di):
+    for a, b in tup:
+        di.setdefault(a, []).append(b)
+    return di
+
+
+def extract_used_techs(url):
+    # webpage = urlopen(url, 60)
+    # content = webpage.read().decode('utf-8')
+    # headers = dict(webpage.getheaders())
+    # webpage = WebPage(url, html=content, headers=headers)#.new_from_url(url, verify=False)
+    webpage = WebPage.new_from_url(url, verify=False)
     wappalyzer = Wappalyzer.latest()
-    techs = wappalyzer.analyze_with_versions_and_categories(webpage)
-    # print(techs)
+    return wappalyzer.analyze_with_versions_and_categories(webpage)
+
+
+def extract_server(url):
+    techs = extract_used_techs(url)
     for key in techs:
         if 'Web servers' in techs[key]['categories']:
             version = False
@@ -51,9 +72,7 @@ def extract_server(url):
 
 
 def extract_cms(url):
-    webpage = WebPage.new_from_url(url)
-    wappalyzer = Wappalyzer.latest()
-    techs = wappalyzer.analyze_with_versions_and_categories(webpage)
+    techs = techs = extract_used_techs(url)
     for key in techs:
         if 'CMS' in techs[key]['categories']:
             version = False
@@ -80,23 +99,47 @@ def read_file_items(file_path):
 
 
 def fetch_all(query):
+    database = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="root",
+        database="web_crawler"
+    )
+
     query_cursor = database.cursor(buffered=True)
     query_cursor.execute(query)
     items = query_cursor.fetchall()
+    database.close()
     return items
 
 
 def fetch_one(query):
+    database = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="root",
+        database="web_crawler"
+    )
+
     query_cursor = database.cursor(buffered=True)
     query_cursor.execute(query)
     item = query_cursor.fetchone()
+    database.close()
     return item
 
 
 def commit_query(query):
+    database = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="root",
+        database="web_crawler"
+    )
+
     query_cursor = database.cursor()
     query_cursor.execute(query)
     database.commit()
+    database.close()
 
 
 def find_category_by_name(category_name):
@@ -161,3 +204,32 @@ def find_websites():
     query = "SELECT * FROM websites"
     return fetch_all(query)
 
+
+def find_categories():
+    query = "SELECT * FROM categories"
+    return fetch_all(query)
+
+
+def create_new_scan(label = ''):
+    query = "INSERT INTO scans (label) VALUES ('" + str(label) + "')"
+    commit_query(query)
+    return fetch_one("SELECT * FROM scans limit 1 ORDER BY id DESC")
+
+
+def fin_rule_id_by_name(rule_name):
+    query = "SELECT * FROM rules WHERE name = '" + str(rule_name) + "'"
+    return fetch_one(query)[0]
+
+
+def fin_page_id_by_url(page_url):
+    query = "SELECT * FROM pages WHERE url = '" + str(page_url) + "'"
+    return fetch_one(query)[0]
+
+
+def save_scan_results_by_scan_id(scan_id, results = []):
+    for result in results:
+        page_id = fin_page_id_by_url(result['url'])
+        for key, value in result['results'].items():
+            rule_id = fin_rule_id_by_name(key)
+            query = "INSERT INTO `scan_results`(`page_id`, `rule_id`, `is_secure`) VALUES ('" + str(page_id) + "','" + str(rule_id) + "','" + str(value) + "')"
+            commit_query(query)

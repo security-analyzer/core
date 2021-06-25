@@ -1,6 +1,6 @@
 import utils.Utils as _utils
 
-class OutdatedServerSoftwareScanner:
+class OutdatedCMSScanner:
 
     def __init__(self, website):
         self._website = website
