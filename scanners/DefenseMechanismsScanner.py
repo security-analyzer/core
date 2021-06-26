@@ -14,7 +14,7 @@ class DefenseMechanismsScanner:
     
     def handle_scan_process(self):
         try:
-            page_scrapper = PageScrapper(self._website, self._pages[:2])
+            page_scrapper = PageScrapper(self._website, self._pages)
             pages = page_scrapper.get_results()
             for page in pages:
                 print("Start scanning: " + page.get_link())

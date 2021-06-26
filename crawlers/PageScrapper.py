@@ -25,7 +25,7 @@ class PageScrapper:
         results = []
         for url in self._pages:
             url = url.replace('\n','')
-            page_infos = requests.get(url, verify=False)
+            page_infos = requests.get(url, verify=False, timeout=60)
             page = Page(website=self._website, link=url, headers=self._get_headers(page_infos), content=self._get_content(page_infos))
             results.append(page)
         return results

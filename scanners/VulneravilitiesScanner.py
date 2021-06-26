@@ -19,7 +19,7 @@ class VulneravilitiesScanner:
 
     def handle_scan_process(self):
         try:
-            page_scrapper = PageScrapper(self._website, self._pages[:2])
+            page_scrapper = PageScrapper(self._website, self._pages)
             pages = page_scrapper.get_results()
 
             has_outdated_cms_vuls = _outdated_cms_vuls_scanner.OutdatedCMSScanner(self._website).has_outdated_cms_vuls()
@@ -28,6 +28,7 @@ class VulneravilitiesScanner:
                 
             for page in pages:
                 print("Start scanning: " + page.get_link())
+                print(page.get_link())
                 result = dict()
                 result['url'] = page.get_link()
                 result['type'] = 'vulneravilities'

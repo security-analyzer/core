@@ -7,14 +7,6 @@ import mysql.connector
 import urllib.request
 
 
-# Database config
-# database = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     passwd="root",
-#     database="web_crawler"
-# )
-
 # Shared utils
 def dict_to_json(dictionary):
     return json.dumps(dictionary, indent = 4)
@@ -194,7 +186,7 @@ def insert_website_with_pages(category_name, website_url = '', pages = []):
         website = find_website_by_url(website_url)
     
     for page in pages:
-        page = page.replace("'", "\\'")
+        page = page.replace("'", "\\'").replace("\n", '')
         print(page)
         query = "INSERT INTO pages (url, website_id) VALUES ('" + str(page) + "', '" + str(website[0]) + "')"
         commit_query(query)
@@ -213,7 +205,7 @@ def find_categories():
 def create_new_scan(label = ''):
     query = "INSERT INTO scans (label) VALUES ('" + str(label) + "')"
     commit_query(query)
-    return fetch_one("SELECT * FROM scans limit 1 ORDER BY id DESC")
+    return fetch_one("SELECT * FROM scans ORDER BY id DESC LIMIT 1")
 
 
 def fin_rule_id_by_name(rule_name):
@@ -222,14 +214,27 @@ def fin_rule_id_by_name(rule_name):
 
 
 def fin_page_id_by_url(page_url):
-    query = "SELECT * FROM pages WHERE url = '" + str(page_url) + "'"
+    query = "SELECT * FROM pages WHERE url LIKE '" + str(page_url) + "'"
     return fetch_one(query)[0]
+
+
+def save_scan_page(scan_id, page_id):
+    query = "INSERT INTO `scan_page`(`page_id`, `scan_id`) VALUES ('" + str(page_id) + "','" + str(scan_id) + "')"
+    commit_query(query)
+    return fetch_one("SELECT * FROM scan_page ORDER BY id DESC LIMIT 1")
+
+
+def save_scan_results(scan_page_id, rule_id, value):
+    is_secure = 1 if value else 0
+    query = "INSERT INTO `scan_page_results`(`scan_page_id`, `rule_id`, `is_secure`) VALUES ('" + str(scan_page_id) + "','" + str(rule_id) + "','" + str(is_secure) + "')"
+    commit_query(query)
+    return fetch_one("SELECT * FROM scan_page_results ORDER BY id DESC LIMIT 1")
 
 
 def save_scan_results_by_scan_id(scan_id, results = []):
     for result in results:
         page_id = fin_page_id_by_url(result['url'])
+        scan_page = save_scan_page(scan_id, page_id)
         for key, value in result['results'].items():
             rule_id = fin_rule_id_by_name(key)
-            query = "INSERT INTO `scan_results`(`page_id`, `rule_id`, `is_secure`) VALUES ('" + str(page_id) + "','" + str(rule_id) + "','" + str(value) + "')"
-            commit_query(query)
+            scan_result = save_scan_results(scan_page[0], rule_id, value)
