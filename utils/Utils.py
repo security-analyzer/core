@@ -238,3 +238,52 @@ def save_scan_results_by_scan_id(scan_id, results = []):
         for key, value in result['results'].items():
             rule_id = fin_rule_id_by_name(key)
             scan_result = save_scan_results(scan_page[0], rule_id, value)
+
+
+def get_pourcentage_vuls_of_all_pages_by_scan(scan_id):
+    query = """ 
+                SELECT 	rules.name,
+                        COUNT(scan_page_results.scan_page_id) as total_pages,
+                        SUM(CASE WHEN scan_page_results.is_secure THEN 1 ELSE 0 END) as nbr_pages,
+                        (SUM(CASE WHEN scan_page_results.is_secure THEN 1 ELSE 0 END) * 100 / COUNT(scan_page_results.scan_page_id)) as pourcentage
+                FROM    scan_page_results, rules, scan_page
+                WHERE   scan_page_results.rule_id = rules.id
+                AND     scan_page.scan_id = '""" + str(scan_id) + """'
+                AND     scan_page.id = scan_page_results.scan_page_id
+                GROUP BY scan_page_results.rule_id
+            """
+    results = []
+    for item in fetch_all(query):
+        result_row = dict()
+        result_row['rule'] = item[0]
+        result_row['total_tested_pages'] = item[1]
+        result_row['total_founded_pages'] = item[2]
+        result_row['pourcentage'] = item[3]
+        results.append(result_row)
+    return results
+
+
+def ge_pourcentage_vuls_of_category_by_scan(scan_id, category_id):
+    query = """ 
+                SELECT 	rules.name,
+                        COUNT(scan_page_results.scan_page_id) as total_pages,
+                        SUM(CASE WHEN scan_page_results.is_secure THEN 1 ELSE 0 END) as nbr_pages,
+                        (SUM(CASE WHEN scan_page_results.is_secure THEN 1 ELSE 0 END) * 100 / COUNT(scan_page_results.scan_page_id)) as pourcentage
+                FROM scan_page_results, rules, scan_page, pages, websites
+                WHERE   scan_page_results.rule_id = rules.id
+                AND     scan_page.scan_id = '""" + str(scan_id) + """'
+                AND scan_page.id = scan_page_results.scan_page_id
+                AND scan_page.page_id = pages.id
+                AND pages.website_id = websites.id
+                AND websites.category_id = '""" + str(category_id) + """'
+                GROUP BY scan_page_results.rule_id
+            """
+    results = []
+    for item in fetch_all(query):
+        result_row = dict()
+        result_row['rule'] = item[0]
+        result_row['total_tested_pages'] = item[1]
+        result_row['total_founded_pages'] = item[2]
+        result_row['pourcentage'] = item[3]
+        results.append(result_row)
+    return results

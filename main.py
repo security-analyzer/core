@@ -8,48 +8,6 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
-def hand_scan_for_category(category_id, scan_id):
-    print(scan_id)
-    print('============ category ' + str(category_id) + ' =========================')
-    websites = _utils.find_websites_by_category_name(category_id)
-    for website in websites:
-        defense_mechanisms_scanner = _defense_mechanisms_scanner.DefenseMechanismsScanner(website['website'], website['pages'])
-        defense_mechanisms_scanner.handle_scan_process()
-        scan_results = defense_mechanisms_scanner.get_scan_results()
-        _utils.save_scan_results_by_scan_id(scan_id, scan_results)
-        print(scan_results)
-        print('\n\n strt defs ====================================================================')
-        print(defense_mechanisms_scanner.get_untested_websites())
-        print('\n\nend def ====================================================================')
-
-
-        vulneravilities_scanner_scanner = _vulneravilities_scanner.VulneravilitiesScanner(website['website'], website['pages'])
-        vulneravilities_scanner_scanner.handle_scan_process()
-        scan_results = vulneravilities_scanner_scanner.get_scan_results()
-        _utils.save_scan_results_by_scan_id(scan_id, scan_results)
-        # print(scan_results)
-        print('\n\n strt vuls ====================================================================')
-        print(vulneravilities_scanner_scanner.get_untested_websites())
-        print('\n\nend vuls ====================================================================')
-
-
-# # Run vuls and defense mechanisms scanners
-if __name__ == "__main__":
-    
-    new_scan = _utils.create_new_scan('Scan 1')
-    queue = Queue()
-
-    start_time = time.time()
-    categories = _utils.find_categories()
-    processes = [Process(target=hand_scan_for_category, args=(category[1], new_scan[0])) for category in categories[:1]]
-
-    for p in processes:
-        p.start()
-
-    for p in processes:
-        p.join()
-
-
 def init_database():
     vuls = [
         'has_mixed_content_vuls',
@@ -196,3 +154,45 @@ def init_database():
                 if website_domain in page:
                     pages.append(page)
             _utils.insert_website_with_pages(website_category['category'], website, pages)
+
+
+def hand_scan_for_category(category_id, scan_id):
+    print(scan_id)
+    print('============ category ' + str(category_id) + ' =========================')
+    websites = _utils.find_websites_by_category_name(category_id)
+    for website in websites:
+        defense_mechanisms_scanner = _defense_mechanisms_scanner.DefenseMechanismsScanner(website['website'], website['pages'])
+        defense_mechanisms_scanner.handle_scan_process()
+        scan_results = defense_mechanisms_scanner.get_scan_results()
+        _utils.save_scan_results_by_scan_id(scan_id, scan_results)
+        print(scan_results)
+        print('\n\n strt defs ====================================================================')
+        print(defense_mechanisms_scanner.get_untested_websites())
+        print('\n\nend def ====================================================================')
+
+
+        vulneravilities_scanner_scanner = _vulneravilities_scanner.VulneravilitiesScanner(website['website'], website['pages'])
+        vulneravilities_scanner_scanner.handle_scan_process()
+        scan_results = vulneravilities_scanner_scanner.get_scan_results()
+        _utils.save_scan_results_by_scan_id(scan_id, scan_results)
+        # print(scan_results)
+        print('\n\n strt vuls ====================================================================')
+        print(vulneravilities_scanner_scanner.get_untested_websites())
+        print('\n\nend vuls ====================================================================')
+
+
+# # Run vuls and defense mechanisms scanners
+if __name__ == "__main__":
+    
+    new_scan = _utils.create_new_scan('Scan 1')
+    queue = Queue()
+
+    start_time = time.time()
+    categories = _utils.find_categories()
+    processes = [Process(target=hand_scan_for_category, args=(category[1], new_scan[0])) for category in categories[:1]]
+
+    for p in processes:
+        p.start()
+
+    for p in processes:
+        p.join()
